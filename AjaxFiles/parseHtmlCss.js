@@ -19,6 +19,7 @@ var tagList = {'form': ['form', 'table'],
     'row': ['row'],
     'text': ['text', 'txt']
 };
+var textInclude = ['font-family', 'font-style', 'font-weight', 'font-size', 'line-height', 'color'];
 // Function to fetch CSS properties
 function getFrameData() {
     // Make the AJAX request to fetch CSS properties
@@ -30,6 +31,8 @@ function getFrameData() {
     function addSemicolon(item) {
         return item + ';';
     }
+    var lastClassNameTag = 'form_form_1';
+
     while (sampleCss.indexOf('*/') !== -1) {
         var classNameTag = 'form' + '_';
         var j = sampleCss.slice(sampleCss.indexOf('/*') + 2, sampleCss.indexOf('*/')).trim();
@@ -44,15 +47,13 @@ function getFrameData() {
                 break;
             }
         }
-//        console.log(cssList);
         classNameTag = classNameTag + j + '_' + cssList[j];
-//        cssList.push(classNameTag);
         objCss[classNameTag] = '';
-        if (!classNameTag.includes('text_') && !classNameTag.includes('row_')) {
+        if (!classNameTag.includes('row_') && !lastClassNameTag.includes('button_') && !lastClassNameTag.includes('Input_')) {
             cssListAll.push(classNameTag);
         }
         sampleCss = sampleCss.slice(sampleCss.indexOf('*/') + 2).trim();
-        if (sampleCss.indexOf('/*') !== -1) {
+        if (sampleCss.indexOf('/*') !== -1) {   
             objCss[classNameTag] = sampleCss.slice(0, sampleCss.indexOf('/*')).trim().split(';');
             objCss[classNameTag].pop();
             objCss[classNameTag].forEach((element, index, arr) => {
@@ -67,7 +68,17 @@ function getFrameData() {
             });
             sampleCss = '';
         }
+
+        if (classNameTag.includes('text_') && !lastClassNameTag.includes('row_')) {
+            for (var i = 0; i < objCss[classNameTag].length; i++){
+                if (textInclude.some(substring => objCss[classNameTag][i].includes(substring))){
+                    objCss[lastClassNameTag] = objCss[lastClassNameTag].concat(objCss[classNameTag][i]);
+                }
+            }
+        }
+        lastClassNameTag = classNameTag;
     }
+
 
     JSON.stringify(objCss);
 //    JSON.stringify(cssListAll);

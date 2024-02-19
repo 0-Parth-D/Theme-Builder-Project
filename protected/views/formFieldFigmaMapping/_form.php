@@ -39,11 +39,27 @@
 	</div>
 
         
-        <div class="fieldFrameMapp" style="display: flex; justify-content: space-between; align-items: center;">
-            <div class="row">
-                    <?php echo $form->labelEx($model,'field_id'); ?>
-                    <?php echo $form->listBox($model,'field_id', array(), array('id' => 'fieldName', 'style'=>'height: 250px; width: 250px; font-size: 0.9rem; padding: 0.5rem')); ?>
-                    <?php echo $form->error($model,'field_id'); ?>
+        <div class="fieldFrameMapp" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap">
+            <div class="fieldClassSelector" style="display: flex; justify-content: space-between; align-items: center; flex-direction: column">
+                <div class="row">
+                        <?php echo $form->labelEx($model,'field_id'); ?>
+                        <?php echo $form->listBox($model,'field_id', array(), array('id' => 'fieldName', 'onClick'=>'lockMappingList("fieldClass"); lockMappingList("htmlTag");', 'style'=>'height: 120px; width: 250px; font-size: 0.9rem; padding: 0.5rem')); ?>
+                        <?php echo $form->error($model,'field_id'); ?>
+                </div>
+
+                <div class="row">
+                        <?php echo $form->labelEx($model,'class_name'); ?>
+                        <?php echo $form->listBox($model,'class_name', $formClassList, array('id' => 'fieldClass', 'onClick'=>'lockMappingList("fieldName"); lockMappingList("htmlTag");', 'style'=>'height: 120px; width: 250px; font-size: 0.9rem; padding: 0.5rem; border-color: orange;')); ?>
+                        <?php echo $form->error($model,'class_name'); ?>
+                </div>
+                
+                <div class="row">
+                        <?php echo $form->labelEx($model,'flag'); ?>
+                        <?php echo $form->listBox($model,'flag', $htmlTagList, array('id' => 'htmlTag', 'onClick'=>'lockMappingList("fieldName"); lockMappingList("fieldClass");', 'style'=>'height: 120px; width: 250px; font-size: 0.9rem; padding: 0.5rem; border-color: red;')); ?>
+                        <?php echo $form->error($model,'flag'); ?>
+                </div>
+            <button id="clearSelectionBtn" type="button" onClick="clearListBoxSelection();">Clear Seletion</button>
+            <br>
             </div>
             
             <div class="row buttons">
@@ -53,7 +69,7 @@
 
             <div class="row">
                     <?php echo $form->labelEx($model,'frame_name'); ?>
-                    <?php echo $form->listBox($model,'frame_name', array() ,array('id' => 'frameName', 'style'=>'height: 250px; width: 250px; font-size: 0.9rem; padding: 0.5rem')); ?>
+                    <?php echo $form->listBox($model,'frame_name', array() ,array('id' => 'frameName', 'style'=>'height: 400px; width: 250px; font-size: 0.9rem; padding: 0.5rem')); ?>
                     <?php echo $form->error($model,'frame_name'); ?>
             </div>
         </div>
@@ -65,8 +81,8 @@
         </div>
 
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('onClick' => 'saveFieldFrameMapping();')); ?>
-                <!--<button type="button" onClick="saveFieldFrameMapping();">Submit</button>-->
+		<?php // echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('onClick' => 'saveFieldFrameMapping();')); ?>
+                <button type="button" onClick="saveFieldFrameMapping();">Submit</button>
 	</div>
 
 <?php $this->endWidget(); ?>
@@ -87,7 +103,7 @@
                 success: function(response) {
                     console.log(response);
                     var jsonResponse = JSON.parse(response);
-                   console.log(jsonResponse)
+                   console.log(jsonResponse);   
                     // Update the options of the existing "field_id" dropdown list with the returned field IDs
                     $('#fieldName').empty(); // Clear existing options
                     $.each(jsonResponse.fieldIds, function(index, fieldId) {
@@ -114,26 +130,52 @@ $(document).ready(function () {
 });
 
 var mappingList = {};
+var htmlMappingList = {};
 
 function fetchElementFrameMapping() {
     const selectedField = document.getElementById('fieldName');
+    const selectedClass = document.getElementById('fieldClass');
     const selectedFrame = document.getElementById('frameName');
+    const selectedHtmlTag = document.getElementById('htmlTag');
     var formFieldsList = <?php echo json_encode($formFieldsList); ?>;
+    var formClassList = <?php echo json_encode($formClassList); ?>;
+    var htmlTagList = <?php echo json_encode($htmlTagList); ?>;
+  
     if (selectedField.value && selectedFrame.value) {
         mappingList[selectedField.value] = selectedFrame.value;
         selectedField.options[selectedField.selectedIndex].remove();
         selectedFrame.options[selectedFrame.selectedIndex].remove();
     }
-    selectedField.selectedIndex = -1;
-    selectedFrame.selectedIndex = -1;
+    else if (selectedClass.value && selectedFrame.value) {
+        mappingList[formClassList[selectedClass.value]] = selectedFrame.value;
+        selectedClass.options[selectedClass.selectedIndex].remove();
+        selectedFrame.options[selectedFrame.selectedIndex].remove();
+    }
+    else if (selectedHtmlTag.value && selectedFrame.value) {
+        htmlMappingList[selectedHtmlTag.value] = selectedFrame.value;
+        selectedHtmlTag.options[selectedHtmlTag.selectedIndex].remove();
+        selectedFrame.options[selectedFrame.selectedIndex].remove();
+    }
     document.getElementById('mappingContainer1').innerHTML = "";
+    console.log(mappingList);
+    console.log(htmlMappingList);
     for (let maps in mappingList) {
         var newDiv = document.createElement("div");
         newDiv.className = "mapDisplayList";
-        newDiv.style.cssText = "position: relative; display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; border: solid 1px #a8a8a8; border-radius: 5px; padding: 0.5rem; width: 48%; height: auto;";
+        if (!isNaN(maps)){
+            newDiv.style.cssText = "position: relative; display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; border: solid 1px #a8a8a8; border-radius: 5px; padding: 0.5rem; width: 48%; height: auto;";
+        }
+        else{
+            newDiv.style.cssText = "position: relative; display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; border: solid 1px orange; border-radius: 5px; padding: 0.5rem; width: 48%; height: auto;";
+        }
         var newP1 = document.createElement("p");
         newP1.style.margin = "0px";
-        newP1.textContent = formFieldsList[maps];
+        if (!isNaN(maps)){
+            newP1.textContent = formFieldsList[maps];
+        }
+        else{
+            newP1.textContent = maps;
+        }
         newDiv.appendChild(newP1);
         var newP2 = document.createElement("p");
         newP2.style.margin = "0px";
@@ -147,20 +189,77 @@ function fetchElementFrameMapping() {
         newRemove.style.cssText = "position: absolute; bottom: 0; right: 0;";
         newRemove.textContent = '-';
         newRemove.onclick = function() {
+            if (!isNaN(maps)){
+                var singleValue = new Option(formFieldsList[maps], maps);
+                selectedField.add(singleValue);
+            }
+            else{
+                var singleClass = new Option(formClassList[maps]);
+                selectedClass.add(singleClass);
+            }
+            var frameValue = new Option(mappingList[maps]);
+            selectedFrame.add(frameValue);
             $(this).parent().remove();
             delete mappingList[maps];
         };
         newDiv.appendChild(newRemove);
         $('.mapDisplayContainer').append(newDiv);
     }
+    for (let htmlMaps in htmlMappingList) {
+        var newDiv = document.createElement("div");
+        newDiv.className = "mapDisplayList";
+        newDiv.style.cssText = "position: relative; display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; border: solid 1px red; border-radius: 5px; padding: 0.5rem; width: 48%; height: auto;";
+
+        var newP1 = document.createElement("p");
+        newP1.style.margin = "0px";
+        newP1.textContent = htmlMaps;
+        newDiv.appendChild(newP1);
+        var newP2 = document.createElement("p");
+        newP2.style.margin = "0px";
+        newP2.textContent = '=>';
+        newDiv.appendChild(newP2);
+        var newP3 = document.createElement("p");
+        newP3.style.margin = "0px";
+        newP3.textContent = htmlMappingList[htmlMaps];
+        newDiv.appendChild(newP3);
+        var newRemove = document.createElement("button");
+        newRemove.style.cssText = "position: absolute; bottom: 0; right: 0;";
+        newRemove.textContent = '-';
+        newRemove.onclick = function() {
+            var singleHtmlTag = new Option(htmlTagList[htmlMaps]);
+            selectedHtmlTag.add(singleHtmlTag);
+            var frameValue = new Option(htmlMappingList[htmlMaps]);
+            selectedFrame.add(frameValue);
+            $(this).parent().remove();
+            delete htmlMappingList[htmlMaps];
+        };
+        newDiv.appendChild(newRemove);
+        $('.mapDisplayContainer').append(newDiv);
+    }
+    clearListBoxSelection();
+}
+
+function clearListBoxSelection(){
+    const selectedField = document.getElementById('fieldName');
+    const selectedClass = document.getElementById('fieldClass');
+    const selectedFrame = document.getElementById('frameName');
+    const selectedHtmlTag = document.getElementById('htmlTag');
+    selectedField.selectedIndex = -1;
+    selectedClass.selectedIndex = -1;
+    selectedFrame.selectedIndex = -1;
+    selectedHtmlTag.selectedIndex = -1;
+    selectedField.disabled = false;
+    selectedClass.disabled = false;
+    selectedHtmlTag.disabled = false;
 }
 
 function saveFieldFrameMapping() {
     $.ajax({
         url: 'index.php?r=formFieldFigmaMapping/saveToMappingList',
         type: 'POST',
-        data: {mappingList: JSON.stringify(mappingList), selectedForm: document.getElementById('formName').value},
-        success: function (mappingList, selectedForm) {
+        data: {htmlMappingList: JSON.stringify(htmlMappingList), mappingList: JSON.stringify(mappingList), selectedForm: document.getElementById('formName').value},
+        success: function (htmlMappingList, mappingList, selectedForm) {
+            console.log(htmlMappingList);
             console.log(mappingList);
             console.log(selectedForm);
         },
@@ -171,6 +270,11 @@ function saveFieldFrameMapping() {
         }
     });
     saveCssProperties();
+}
+
+function lockMappingList(listToLock){
+    const selectedList = document.getElementById(listToLock);
+    selectedList.disabled = true;
 }
 
 </script>

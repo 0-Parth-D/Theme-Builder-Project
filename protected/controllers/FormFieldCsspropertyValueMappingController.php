@@ -81,12 +81,18 @@ class FormFieldCsspropertyValueMappingController extends Controller {
             $value = json_decode($_POST['objCss']);
         }
         print_r($value);
-//        $textInclude = ['font-family', 'font-style', 'font-weight', 'font-size', 'line-height', 'color'];
+        $textInclude = ['font-family', 'font-style', 'font-weight', 'font-size', 'line-height', 'color'];
         foreach ($value as $key => $items) {
             foreach ($items as $item) {
                 $propertyValuePair = explode(':', $item);
+                if (strpos($propertyValuePair[1], 'url')!== false){
+                    $propertyValuePair[1] = 'url(images/'.explode('(', $propertyValuePair[1])[1];
+                }
                 $cssPropertiesModel = CssProperties::model()->find('property_name=:property_name', array(':property_name' => $propertyValuePair[0]));
                 $formFieldFigmaMapping = FormFieldFigmaMapping::model()->find('frame_name=:frame_name', array(':frame_name' => $key));
+//                if (str_contains($key, 'text_') && !in_array($propertyValuePair[0], $textInclude)){
+//                    continue;
+//                }
                 if ($cssPropertiesModel !== null) {
                     $model = new FormFieldCsspropertyValueMapping;
                     if (isset($formFieldFigmaMapping->form_id) && isset($formFieldFigmaMapping->field_id)){
@@ -259,7 +265,7 @@ class FormFieldCsspropertyValueMappingController extends Controller {
 
         // Find the CSS properties for the given form ID
         $formFieldStyles = FormFieldCsspropertyValueMapping::model()->findAllByAttributes(array('form_id' => $formId));
-
+        
         // Array to store CSS properties for each form element
         $cssStyles = array();
 
@@ -271,7 +277,7 @@ class FormFieldCsspropertyValueMappingController extends Controller {
             $cssPropertyId = $formFieldStyle->css_property_id;
             $cssProperty = CssProperties::model()->findByPk($cssPropertyId)->property_name;
             $value = $formFieldStyle->value;
-
+           
             // Create CSS rule and add it to the array
             $cssStyles[] = "#" . $field . "{" . $cssProperty . ":" . $value . "}";
         }
