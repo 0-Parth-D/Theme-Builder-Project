@@ -28,6 +28,7 @@ function getFrameData() {
     var sampleCss = document.getElementById('cssCode').value.replaceAll('\n', '');
     sampleCss = sampleCss.replaceAll('/* Auto layout */', '');
     sampleCss = sampleCss.replaceAll('/* Inside auto layout */', '');
+    sampleCss = sampleCss.replaceAll('/* identical to box height */', '');
     function addSemicolon(item) {
         return item + ';';
     }

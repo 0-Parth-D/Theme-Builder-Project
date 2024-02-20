@@ -7,12 +7,13 @@
  * @property integer $id
  * @property integer $form_id
  * @property integer $field_id
+ * @property string $class_name
+ * @property string $html_tag
  * @property integer $css_property_id
  * @property string $value
  *
  * The followings are the available model relations:
  * @property CssProperties $cssProperty
- * @property FormFields $field
  */
 class FormFieldCsspropertyValueMapping extends CActiveRecord
 {
@@ -32,12 +33,12 @@ class FormFieldCsspropertyValueMapping extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-//			array('form_id, field_id, css_property_id, value', 'required'),
+//			array('form_id, field_id, class_name, html_tag, css_property_id, value', 'required'),
 			array('form_id, field_id, css_property_id', 'numerical', 'integerOnly'=>true),
-			array('value', 'length', 'max'=>255),
+			array('class_name, html_tag, value', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, form_id, field_id, css_property_id, value', 'safe', 'on'=>'search'),
+			array('id, form_id, field_id, class_name, html_tag, css_property_id, value', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -50,7 +51,6 @@ class FormFieldCsspropertyValueMapping extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'cssProperty' => array(self::BELONGS_TO, 'CssProperties', 'css_property_id'),
-			'field' => array(self::BELONGS_TO, 'FormFields', 'field_id'),
 		);
 	}
 
@@ -63,6 +63,8 @@ class FormFieldCsspropertyValueMapping extends CActiveRecord
 			'id' => 'ID',
 			'form_id' => 'Form',
 			'field_id' => 'Field',
+			'class_name' => 'Class Name',
+			'html_tag' => 'Html Tag',
 			'css_property_id' => 'Css Property',
 			'value' => 'Value',
 		);
@@ -89,6 +91,8 @@ class FormFieldCsspropertyValueMapping extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('form_id',$this->form_id);
 		$criteria->compare('field_id',$this->field_id);
+		$criteria->compare('class_name',$this->class_name,true);
+		$criteria->compare('html_tag',$this->html_tag,true);
 		$criteria->compare('css_property_id',$this->css_property_id);
 		$criteria->compare('value',$this->value,true);
 

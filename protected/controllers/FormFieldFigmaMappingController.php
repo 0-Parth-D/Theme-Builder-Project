@@ -30,7 +30,7 @@ class FormFieldFigmaMappingController extends Controller {
                 'users' => array('*'),
             ),
             array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions' => array('create', 'update', 'fetchFields', 'saveToMappingList', 'successPage'),
+                'actions' => array('create', 'update', 'fetchFields', 'saveToMappingList', 'successPage','editAllMapping', 'deleteAllMapping', 'editToMappingList'),
                 'users' => array('@'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
@@ -120,6 +120,56 @@ class FormFieldFigmaMappingController extends Controller {
         Yii::app()->end();
         $this->successPage();
     }
+    
+    
+    public function actionEditToMappingList() {
+        if (isset($_POST['fieldNameUpdate']) || isset($_POST['classNameUpdate']) || isset($_POST['htmlTagUpdate'])) {
+            $fieldNameUpdate = $_POST['fieldNameUpdate'];
+            $classNameUpdate = $_POST['classNameUpdate'];
+            $htmlTagUpdate = $_POST['htmlTagUpdate'];
+            $updateModelId = $_POST['updateModelId'];
+//            $frameNameUpdate = $_POST['frameNameUpdate'];
+        }
+        $selectedMapping = FormFieldFigmaMapping::model()->findByPk($updateModelId);
+        $selectedCssMappings = FormFieldCsspropertyValueMapping::model()->findAllByAttributes(array('form_id'=>$selectedMapping->form_id,'field_id'=>$selectedMapping->field_id,'class_name'=>$selectedMapping->class_name,'html_tag'=>$selectedMapping->html_tag));
+        foreach ($selectedCssMappings as $cssMapping) {
+            $cssMapping->field_id = $fieldNameUpdate;
+            $cssMapping->class_name = $classNameUpdate;
+            $cssMapping->html_tag = $htmlTagUpdate;
+            if (!$cssMapping->save()) {
+               // Handle the error here
+               print_r($cssMapping->getErrors());
+            }
+        }
+        $selectedMapping->field_id = $fieldNameUpdate;
+        $selectedMapping->class_name = $classNameUpdate;
+        $selectedMapping->html_tag = $htmlTagUpdate;
+        if (!$selectedMapping->save()) {
+              // Handle the error here
+               print_r($selectedMapping->getErrors());
+            }
+    }
+    
+    public function actionEditAllMapping() {
+        if (isset($_POST['editValue'])) {
+            $editId = $_POST['editValue'];
+        }
+        
+        $this->redirect(array('update', 'id'=>$editId), array());
+        
+    }
+    public function actionDeleteAllMapping() {
+        if (isset($_POST['deleteValue'])) {
+            $modifyId = $_POST['deleteValue'];
+        }
+        $selectedMapping = FormFieldFigmaMapping::model()->findByPk($modifyId);
+        print_r($selectedMapping);
+        $selectedCssMappings = FormFieldCsspropertyValueMapping::model()->findAllByAttributes(array('form_id'=>$selectedMapping->form_id,'field_id'=>$selectedMapping->field_id,'class_name'=>$selectedMapping->class_name,'html_tag'=>$selectedMapping->html_tag));
+        foreach ($selectedCssMappings as $cssMapping) {
+            $cssMapping->delete();
+        }
+        $selectedMapping->delete();
+    }
 
     public function actionSuccessPage() {
 
@@ -157,18 +207,28 @@ class FormFieldFigmaMappingController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->loadModel($id);
+                $formList = CHtml::listData(ApplicationForms::model()->findAll(), 'id', 'menu_form');
+        $formFieldsList = CHtml::listData(FormFields::model()->findAll(), 'FIELD_ID', 'TITLE');
+        $formClassList = array('Buttons' => 'Buttons', 'Radio-Button-List' => 'Radio-Button-List', 'Dropdown-List' => 'Dropdown-List', 'Checkbox-List' => 'Checkbox-List', 'Input-Labels' => 'Input-Labels', 'Text-Input-Box' => 'Text-Input-Box');
+        $htmlTagList = array('button' => 'button', 'div' => 'div', 'input' => 'input', 'label' => 'label');
 
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
         if (isset($_POST['FormFieldFigmaMapping'])) {
-            $model->attributes = $_POST['FormFieldFigmaMapping'];
+            $model->id = $id;
+//            $model->form_id = ;
             if ($model->save())
                 $this->redirect(array('view', 'id' => $model->id));
         }
 
         $this->render('update', array(
             'model' => $model,
+            'formList' => $formList,
+            'formFieldsList' => $formFieldsList,
+            'formClassList' => $formClassList,
+            'htmlTagList' => $htmlTagList,
+            'modelId' => $id,
         ));
     }
 

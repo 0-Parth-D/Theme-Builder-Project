@@ -52,24 +52,24 @@ $controllerId = $controller->getId();
 
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'student_id', array('id' => 'field_44')); ?>
+        <?php echo $form->labelEx($model, 'student_id', array('id' => 'field_44', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'student_id', array('id' => 'field_23')); ?>
 <?php echo $form->error($model, 'student_id'); ?>
     </div>
-
+    
     <div class="row">
-        <?php echo $form->labelEx($model, 'first_name', array('id' => 'field_45')); ?>
+        <?php echo $form->labelEx($model, 'first_name', array('id' => 'field_45', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'first_name', array('id' => 'field_24', 'size' => 50, 'maxlength' => 50)); ?>
 <?php echo $form->error($model, 'first_name'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'last_name', array('id' => 'field_46')); ?>
+        <?php echo $form->labelEx($model, 'last_name', array('id' => 'field_46', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'last_name', array('id' => 'field_25', 'size' => 50, 'maxlength' => 50)); ?>
 <?php echo $form->error($model, 'last_name'); ?>
     </div>
     <div class="row">
-        <?php echo $form->labelEx($model, 'date_of_birth', array('id' => 'field_47')); ?>
+        <?php echo $form->labelEx($model, 'date_of_birth', array('id' => 'field_47', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'date_of_birth', array('id' => 'field_26', 'type' => 'date')); ?>
 <?php echo $form->error($model, 'date_of_birth'); ?>
     </div>
@@ -77,84 +77,84 @@ $controllerId = $controller->getId();
 
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'address', array('id' => 'field_48')); ?>
+        <?php echo $form->labelEx($model, 'address', array('id' => 'field_48', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'address', array('id' => 'field_27', 'size' => 60, 'maxlength' => 255)); ?>
 <?php echo $form->error($model, 'address'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'phone_number', array('id' => 'field_49')); ?>
+        <?php echo $form->labelEx($model, 'phone_number', array('id' => 'field_49', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'phone_number', array('id' => 'field_28', 'size' => 20, 'maxlength' => 20)); ?>
 <?php echo $form->error($model, 'phone_number'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'email_address', array('id' => 'field_50')); ?>
+        <?php echo $form->labelEx($model, 'email_address', array('id' => 'field_50', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'email_address', array('id' => 'field_29', 'size' => 60, 'maxlength' => 255)); ?>
 <?php echo $form->error($model, 'email_address'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'student_department_id', array('id' => 'field_51')); ?>
+        <?php echo $form->labelEx($model, 'student_department_id', array('id' => 'field_51', 'class'=>'Input-Labels')); ?>
         <?php echo $form->dropDownList($model, 'department_id', $departmentList, array('id' => 'field_30', 'empty' => 'Select Department')); ?>
 <?php echo $form->error($model, 'department_id'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'student_course_type_id', array('id' => 'field_52')); ?>
+        <?php echo $form->labelEx($model, 'student_course_type_id', array('id' => 'field_52', 'class'=>'Input-Labels')); ?>
         <?php echo $form->dropDownList($model, 'course_type_id', $courseTypeList, array('id' => 'field_31', 'empty' => 'Select Course Type')); ?>
 <?php echo $form->error($model, 'course_type_id'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'student_course_id', array('id' => 'field_53')); ?>
+        <?php echo $form->labelEx($model, 'student_course_id', array('id' => 'field_53', 'class'=>'Input-Labels')); ?>
         <?php echo $form->dropDownList($model, 'course_id', $courseList, array('id' => 'field_32', 'empty' => 'Select Course Name ')); ?>
 <?php echo $form->error($model, 'course_id'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'major', array('id' => 'field_54')); ?>
+        <?php echo $form->labelEx($model, 'major', array('id' => 'field_54', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'major', array('id' => 'field_33', 'size' => 50, 'maxlength' => 50)); ?>
 <?php echo $form->error($model, 'major'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'academic_status', array('id' => 'field_55')); ?>
+        <?php echo $form->labelEx($model, 'academic_status', array('id' => 'field_55', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'academic_status', array('id' => 'field_34', 'size' => 50, 'maxlength' => 50)); ?>
 <?php echo $form->error($model, 'academic_status'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'theme_ID', array('id' => 'field_56')); ?>
+        <?php echo $form->labelEx($model, 'theme_ID', array('id' => 'field_56', 'class'=>'Input-Labels')); ?>
         <?php echo $form->dropDownList($model, 'theme_ID', $themeList, array('id' => 'field_35', 'empty' => 'Select Theme')); ?>
 <?php echo $form->error($model, 'theme_ID'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'emergency_contact_name', array('id' => 'field_57')); ?>
+        <?php echo $form->labelEx($model, 'emergency_contact_name', array('id' => 'field_57', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'emergency_contact_name', array('id' => 'field_36', 'size' => 60, 'maxlength' => 100)); ?>
 <?php echo $form->error($model, 'emergency_contact_name'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'emergency_contact_phone', array('id' => 'field_58')); ?>
+        <?php echo $form->labelEx($model, 'emergency_contact_phone', array('id' => 'field_58', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'emergency_contact_phone', array('id' => 'field_37', 'size' => 20, 'maxlength' => 20)); ?>
 <?php echo $form->error($model, 'emergency_contact_phone'); ?>
     </div>
 
     <div class="row">
-        <?php echo $form->labelEx($model, 'emergency_contact_relationship', array('id' => 'field_59')); ?>
+        <?php echo $form->labelEx($model, 'emergency_contact_relationship', array('id' => 'field_59', 'class'=>'Input-Labels')); ?>
         <?php echo $form->textField($model, 'emergency_contact_relationship', array('id' => 'field_38', 'size' => 50, 'maxlength' => 50)); ?>
 <?php echo $form->error($model, 'emergency_contact_relationship'); ?>
     </div>
 
 
     <div class="row buttons">
-<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('id' => "field_39")); ?>
+<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('id' => "field_39", 'class'=>'Buttons')); ?>
     </div>
 
     <div class="row buttons">
-<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('id' => "field_40")); ?>
+<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('id' => "field_40", 'class'=>'Buttons')); ?>
     </div>
 
 <?php $this->endWidget(); ?>

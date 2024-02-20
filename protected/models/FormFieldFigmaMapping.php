@@ -7,9 +7,9 @@
  * @property integer $id
  * @property integer $form_id
  * @property integer $field_id
- * @property string $frame_name
  * @property string $class_name
  * @property string $html_tag
+ * @property string $frame_name
  * @property integer $flag
  */
 class FormFieldFigmaMapping extends CActiveRecord
@@ -30,12 +30,12 @@ class FormFieldFigmaMapping extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-//			array('form_id, field_id, frame_name, class_name, html_tag, flag', 'required'),
+//			array('form_id, field_id, class_name, html_tag, frame_name, flag', 'required'),
 			array('form_id, field_id, flag', 'numerical', 'integerOnly'=>true),
-			array('frame_name, class_name, html_tag', 'length', 'max'=>255),
+			array('class_name, html_tag, frame_name', 'length', 'max'=>255),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, form_id, field_id, frame_name, class_name, html_tag, flag', 'safe', 'on'=>'search'),
+			array('id, form_id, field_id, class_name, html_tag, frame_name, flag', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -59,9 +59,9 @@ class FormFieldFigmaMapping extends CActiveRecord
 			'id' => 'ID',
 			'form_id' => 'Form',
 			'field_id' => 'Field',
-			'frame_name' => 'Frame Name',
 			'class_name' => 'Class Name',
 			'html_tag' => 'Html Tag',
+			'frame_name' => 'Frame Name',
 			'flag' => 'Flag',
 		);
 	}
@@ -87,9 +87,9 @@ class FormFieldFigmaMapping extends CActiveRecord
 		$criteria->compare('id',$this->id);
 		$criteria->compare('form_id',$this->form_id);
 		$criteria->compare('field_id',$this->field_id);
-		$criteria->compare('frame_name',$this->frame_name,true);
 		$criteria->compare('class_name',$this->class_name,true);
 		$criteria->compare('html_tag',$this->html_tag,true);
+		$criteria->compare('frame_name',$this->frame_name,true);
 		$criteria->compare('flag',$this->flag);
 
 		return new CActiveDataProvider($this, array(

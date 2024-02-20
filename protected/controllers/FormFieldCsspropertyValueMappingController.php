@@ -80,7 +80,7 @@ class FormFieldCsspropertyValueMappingController extends Controller {
         if (isset($_POST['objCss'])) {
             $value = json_decode($_POST['objCss']);
         }
-        print_r($value);
+//        print_r($value);
         $textInclude = ['font-family', 'font-style', 'font-weight', 'font-size', 'line-height', 'color'];
         foreach ($value as $key => $items) {
             foreach ($items as $item) {
@@ -95,9 +95,11 @@ class FormFieldCsspropertyValueMappingController extends Controller {
 //                }
                 if ($cssPropertiesModel !== null) {
                     $model = new FormFieldCsspropertyValueMapping;
-                    if (isset($formFieldFigmaMapping->form_id) && isset($formFieldFigmaMapping->field_id)){
+                    if (isset($formFieldFigmaMapping->form_id)){
                         $model->form_id = $formFieldFigmaMapping->form_id;
                         $model->field_id = $formFieldFigmaMapping->field_id;
+                        $model->class_name = $formFieldFigmaMapping->class_name;
+                        $model->html_tag = $formFieldFigmaMapping->html_tag;
                         $model->css_property_id = $cssPropertiesModel->id;
                         $model->value = $propertyValuePair[1];
                         if (!$model->save()) {
@@ -273,13 +275,26 @@ class FormFieldCsspropertyValueMappingController extends Controller {
         foreach ($formFieldStyles as $formFieldStyle) {
             // Store CSS property for each form element
             $fieldId = $formFieldStyle->field_id;
-            $field = "field_" . $fieldId;
+            $className = $formFieldStyle->class_name;
+            $htmlTag = $formFieldStyle->html_tag;
+            if ($fieldId != 0){
+                $identifier = "#";
+                $selector = "field_" . $fieldId;
+            }
+            else if ($className != null){
+                $identifier = ".";
+                $selector = $className;
+            }
+            else if ($htmlTag != null) {
+                $identifier = "";
+                $selector = $htmlTag;
+            }
             $cssPropertyId = $formFieldStyle->css_property_id;
             $cssProperty = CssProperties::model()->findByPk($cssPropertyId)->property_name;
             $value = $formFieldStyle->value;
            
             // Create CSS rule and add it to the array
-            $cssStyles[] = "#" . $field . "{" . $cssProperty . ":" . $value . "}";
+            $cssStyles[] = $identifier . $selector . "{" . $cssProperty . ":" . $value . "}";
         }
 
         // Convert the CSS properties array to a string
@@ -287,6 +302,7 @@ class FormFieldCsspropertyValueMappingController extends Controller {
 
         // Return the CSS styles in the JSON response
         echo CJSON::encode($cssStylesString);
+        print_r($cssStylesString);
         Yii::app()->end();
     }
 }

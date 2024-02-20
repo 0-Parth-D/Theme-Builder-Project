@@ -14,7 +14,8 @@ $(document).ready(function() {
             // Wrap the response in a <style> tag and append it to the <head>
             var styleElement = $('<style>').text(response);
             $('head').append(styleElement);
-            console.log("style tag is appended")
+            console.log(styleElement);
+            console.log("style tag is appended");
         },
         error: function(jqXHR, textStatus, errorThrown) {
             // Handle the error case here

@@ -18,4 +18,4 @@ $this->menu=array(
 
 <h1>Update FormFieldFigmaMapping <?php echo $model->id; ?></h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model)); ?>
+<?php $this->renderPartial('_form', array('model'=>$model, 'formList'=>$formList, 'formFieldsList'=>$formFieldsList,  'formClassList'=>$formClassList, 'htmlTagList'=>$htmlTagList,'modelId' => $modelId, 'update'=>true)); ?>
