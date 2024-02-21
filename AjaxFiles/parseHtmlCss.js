@@ -30,7 +30,7 @@ function getFrameData() {
     sampleCss = sampleCss.replaceAll('/* Inside auto layout */', '');
     sampleCss = sampleCss.replaceAll('/* identical to box height */', '');
     function addSemicolon(item) {
-        return item + ';';
+        return item + ' !important;';
     }
     var lastClassNameTag = 'form_form_1';
 

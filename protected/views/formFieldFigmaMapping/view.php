@@ -10,8 +10,8 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'List FormFieldFigmaMapping', 'url'=>array('index')),
 	array('label'=>'Create FormFieldFigmaMapping', 'url'=>array('create')),
-	array('label'=>'Update FormFieldFigmaMapping', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Delete FormFieldFigmaMapping', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+//	array('label'=>'Update FormFieldFigmaMapping', 'url'=>array('update', 'id'=>$model->id)),
+//	array('label'=>'Delete FormFieldFigmaMapping', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
 	array('label'=>'Manage FormFieldFigmaMapping', 'url'=>array('admin')),
 );
 ?>

@@ -3,15 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/controllers/ThemesController.php</file>
+            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/formFieldFigmaMapping/update.php</file>
+            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/formFieldFigmaMapping/editThisPage.php</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/formFieldFigmaMapping/_form.php</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/AjaxFiles/parseHtmlCss.js</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/protected/models/FormFieldFigmaMapping.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/formFieldFigmaMapping/successPage.php</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/protected/controllers/FormFieldCsspropertyValueMappingController.php</file>
+            <file>file:/C:/xampp/htdocs/themebuilder11/AjaxFiles/applyStyleToFormElement.js</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/protected/controllers/FormFieldFigmaMappingController.php</file>
+            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/formFieldFigmaMapping/admin.php</file>
             <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/formFieldFigmaMapping/create.php</file>
-            <file>file:/C:/xampp/htdocs/themebuilder11/protected/controllers/FormElementCssPropertiesThemeMappingController.php</file>
+            <file>file:/C:/xampp/htdocs/themebuilder11/protected/views/formFieldFigmaMapping/_search.php</file>
         </group>
     </open-files>
 </project-private>

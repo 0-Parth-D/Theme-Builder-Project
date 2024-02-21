@@ -15,4 +15,4 @@ $this->menu=array(
 
 <h1>Create FormFieldFigmaMapping</h1>
 
-<?php $this->renderPartial('_form', array('model'=>$model, 'formList'=>$formList, 'formFieldsList'=>$formFieldsList,  'formClassList'=>$formClassList, 'htmlTagList'=>$htmlTagList,'modelId' => -1, 'update'=>false)); ?>
+<?php $this->renderPartial('_form', array('model'=>$model, 'formList'=>$formList, 'formFieldsList'=>$formFieldsList,  'formClassList'=>$formClassList, 'htmlTagList'=>$htmlTagList,'modelId' => -1)); ?>

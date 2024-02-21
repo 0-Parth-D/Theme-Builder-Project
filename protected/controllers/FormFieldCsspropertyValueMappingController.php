@@ -102,8 +102,8 @@ class FormFieldCsspropertyValueMappingController extends Controller {
                         $model->html_tag = $formFieldFigmaMapping->html_tag;
                         $model->css_property_id = $cssPropertiesModel->id;
                         $model->value = $propertyValuePair[1];
-                        if (!$model->save()) {
-                            print_r($model->getErrors());
+                        if (!$this->combinationValidation($model)) {
+                            $model->save();
                         }
                     }
                 }
@@ -153,12 +153,16 @@ class FormFieldCsspropertyValueMappingController extends Controller {
         // Fetch form_id, field_id, and css_property_id from the POST model
         $formId = $model->form_id;
         $fieldId = $model->field_id;
+        $className = $model->class_name;
+        $htmlTag = $model->html_tag;
         $cssPropertyId = $model->css_property_id;
 
         // Check if the combination already exists in the database
         $existingModel = FormFieldCsspropertyValueMapping::model()->findByAttributes(array(
             'form_id' => $formId,
             'field_id' => $fieldId,
+            'class_name' => $className,
+            'html_tag' => $htmlTag,
             'css_property_id' => $cssPropertyId,
         ));
 

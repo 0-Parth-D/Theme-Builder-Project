@@ -22,7 +22,7 @@
 
     <p class="note">Fields with <span class="required">*</span> are required.</p>
 
-<?php echo $form->errorSummary($model); ?>
+    <?php echo $form->errorSummary($model); ?>
 
     <div class="row">
         <p>CSS Code</p>
@@ -30,14 +30,14 @@
     </div>
 
     <div class="row buttons">
-<?php // echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('onclick' => 'js:myFunction();'));  ?>
+        <?php // echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('onclick' => 'js:myFunction();'));  ?>
         <button id="getFramesBtn" type="button" onClick="getFrameData(); submitbtn();">Get Frames</button>
     </div>
 
     <div class="row">
         <?php echo $form->labelEx($model, 'form_id'); ?>
-<?php echo $form->dropDownList($model, 'form_id', $formList, array('id' => 'formName', 'empty' => 'Select Form')) ?>
-<?php echo $form->error($model, 'form_id'); ?>
+        <?php echo $form->dropDownList($model, 'form_id', $formList, array('id' => 'formName', 'empty' => 'Select Form')) ?>
+        <?php echo $form->error($model, 'form_id'); ?>
     </div>
 
 
@@ -45,38 +45,38 @@
         <div class="fieldClassSelector" style="display: flex; justify-content: space-between; align-items: center; flex-direction: column">
             <div class="row">
                 <?php echo $form->labelEx($model, 'field_id'); ?>
-<?php echo $form->listBox($model, 'field_id', array(), array('id' => 'fieldName', 'onClick' => 'lockMappingList("fieldClass"); lockMappingList("htmlTag");', 'style' => 'height: 120px; width: 250px; font-size: 0.9rem; padding: 0.5rem')); ?>
-<?php echo $form->error($model, 'field_id'); ?>
+                <?php echo $form->listBox($model, 'field_id', array(), array('id' => 'fieldName', 'onClick' => 'lockMappingList("fieldClass"); lockMappingList("htmlTag");', 'style' => 'height: 120px; width: 250px; font-size: 0.9rem; padding: 0.5rem')); ?>
+                <?php echo $form->error($model, 'field_id'); ?>
             </div>
 
             <div class="row">
                 <?php echo $form->labelEx($model, 'class_name'); ?>
-<?php echo $form->listBox($model, 'class_name', $formClassList, array('id' => 'fieldClass', 'onClick' => 'lockMappingList("fieldName"); lockMappingList("htmlTag");', 'style' => 'height: 120px; width: 250px; font-size: 0.9rem; padding: 0.5rem; border-color: orange;')); ?>
-<?php echo $form->error($model, 'class_name'); ?>
+                <?php echo $form->listBox($model, 'class_name', $formClassList, array('id' => 'fieldClass', 'onClick' => 'lockMappingList("fieldName"); lockMappingList("htmlTag");', 'style' => 'height: 120px; width: 250px; font-size: 0.9rem; padding: 0.5rem; border-color: orange;')); ?>
+                <?php echo $form->error($model, 'class_name'); ?>
             </div>
 
             <div class="row">
-                <?php echo $form->labelEx($model, 'flag'); ?>
-<?php echo $form->listBox($model, 'flag', $htmlTagList, array('id' => 'htmlTag', 'onClick' => 'lockMappingList("fieldName"); lockMappingList("fieldClass");', 'style' => 'height: 120px; width: 250px; font-size: 0.9rem; padding: 0.5rem; border-color: red;')); ?>
-<?php echo $form->error($model, 'flag'); ?>
+                <?php echo $form->labelEx($model, 'html_tag'); ?>
+                <?php echo $form->listBox($model, 'html_tag', $htmlTagList, array('id' => 'htmlTag', 'onClick' => 'lockMappingList("fieldName"); lockMappingList("fieldClass");', 'style' => 'height: 120px; width: 250px; font-size: 0.9rem; padding: 0.5rem; border-color: red;')); ?>
+                <?php echo $form->error($model, 'html_tag'); ?>
             </div>
             <button id="clearSelectionBtn" type="button" onClick="clearListBoxSelection();">Clear Selection</button>
             <br>
         </div>
 
         <div class="row buttons">
-<?php // echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('onclick' => 'js:myFunction();'));  ?>
+            <?php // echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save', array('onclick' => 'js:myFunction();'));  ?>
             <button id="mapFieldsBtn" type="button" onClick="fetchElementFrameMapping();"><= Map =></button>
         </div>
 
         <div class="row">
             <?php echo $form->labelEx($model, 'frame_name'); ?>
-<?php echo $form->listBox($model, 'frame_name', array(), array('id' => 'frameName', 'style' => 'height: 400px; width: 250px; font-size: 0.9rem; padding: 0.5rem')); ?>
-<?php echo $form->error($model, 'frame_name'); ?>
+            <?php echo $form->listBox($model, 'frame_name', array(), array('id' => 'frameName', 'style' => 'height: 400px; width: 250px; font-size: 0.9rem; padding: 0.5rem')); ?>
+            <?php echo $form->error($model, 'frame_name'); ?>
         </div>
     </div>
 
-<?php echo $form->labelEx($model, 'Mapping List'); ?><br>
+    <?php echo $form->labelEx($model, 'Mapping List'); ?><br>
 
     <div id ="mappingContainer1" class="mapDisplayContainer" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
         <p>(empty)</p>
@@ -84,16 +84,12 @@
 
     <div class="row buttons">
         <?php
-        if (!$update) {
             echo CHtml::submitButton('Create', array('onClick' => 'saveFieldFrameMapping();'));
-        } else {
-//                        echo CHtml::submitButton('Save', array('onClick' => 'updateFieldFrameMapping();'));
-            echo '<button type="button" onClick="updateFieldFrameMapping();">Submit btn</button>';
-        }
+//        echo '<button type="button" onClick="saveFieldFrameMapping();">Create</button>';
         ?>
     </div>
 
-<?php $this->endWidget(); ?>
+    <?php $this->endWidget(); ?>
 
 </div><!-- form -->
 
@@ -109,9 +105,9 @@
                 type: 'GET',
                 data: {formId: formId},
                 success: function (response) {
-                    console.log(response);
+//                console.log(response);
                     var jsonResponse = JSON.parse(response);
-                    console.log(jsonResponse);
+//                console.log(jsonResponse);
                     // Update the options of the existing "field_id" dropdown list with the returned field IDs
                     $('#fieldName').empty(); // Clear existing options
                     $.each(jsonResponse.fieldIds, function (index, fieldId) {
@@ -127,8 +123,9 @@
                     console.error('Error:', error);
                 }
             });
-        });
+        }).change(); // Trigger the change event
     });
+
     $(document).ready(function () {
         // Event handler for page load
         $(window).on('load', function () {
@@ -273,6 +270,8 @@
             }
         });
         saveCssProperties();
+        mappingList = {};
+        htmlMappingList = {};
     }
 
     function updateFieldFrameMapping() {
@@ -300,6 +299,7 @@
 
     function lockMappingList(listToLock) {
         const selectedList = document.getElementById(listToLock);
+        selectedList.value = -1;
         selectedList.disabled = true;
     }
 
