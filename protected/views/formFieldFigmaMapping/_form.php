@@ -25,8 +25,8 @@
     <?php echo $form->errorSummary($model); ?>
 
     <div class="row">
-        <p>CSS Code</p>
-        <textarea type="textField" id="cssCode" name="cssCode"></textarea><br>
+        <label style="margin: 0;">CSS Code</label>
+        <textarea type="textField" id="cssCode" name="cssCode" style="width: 100%; height: 10rem"></textarea><br>
     </div>
 
     <div class="row buttons">
@@ -84,7 +84,7 @@
 
     <div class="row buttons">
         <?php
-            echo CHtml::submitButton('Create', array('onClick' => 'saveFieldFrameMapping();'));
+        echo CHtml::submitButton('Create', array('onClick' => 'saveFieldFrameMapping();'));
 //        echo '<button type="button" onClick="saveFieldFrameMapping();">Create</button>';
         ?>
     </div>
@@ -105,9 +105,9 @@
                 type: 'GET',
                 data: {formId: formId},
                 success: function (response) {
-//                console.log(response);
+
                     var jsonResponse = JSON.parse(response);
-//                console.log(jsonResponse);
+                    
                     // Update the options of the existing "field_id" dropdown list with the returned field IDs
                     $('#fieldName').empty(); // Clear existing options
                     $.each(jsonResponse.fieldIds, function (index, fieldId) {
@@ -126,17 +126,11 @@
         }).change(); // Trigger the change event
     });
 
-    $(document).ready(function () {
-        // Event handler for page load
-        $(window).on('load', function () {
-            // Get the controller and action names
-//            // Call the function to fetch CSS properties
-        });
-    });
-
+    // Global Variables
     var mappingList = {};
     var htmlMappingList = {};
 
+    // Function to Get the selected field and frame mapping
     function fetchElementFrameMapping() {
         const selectedField = document.getElementById('fieldName');
         const selectedClass = document.getElementById('fieldClass');
@@ -146,6 +140,7 @@
         var formClassList = <?php echo json_encode($formClassList); ?>;
         var htmlTagList = <?php echo json_encode($htmlTagList); ?>;
 
+        // Save the mapping according to the selected class_name, html_tag or field_id
         if (selectedField.value && selectedFrame.value) {
             mappingList[selectedField.value] = selectedFrame.value;
             selectedField.options[selectedField.selectedIndex].remove();
@@ -160,8 +155,8 @@
             selectedFrame.options[selectedFrame.selectedIndex].remove();
         }
         document.getElementById('mappingContainer1').innerHTML = "";
-//    console.log(mappingList);
-//    console.log(htmlMappingList);
+
+        // Create dynamic <div> to display the mappings for field_id and class_name
         for (let maps in mappingList) {
             var newDiv = document.createElement("div");
             newDiv.className = "mapDisplayList";
@@ -205,6 +200,8 @@
             newDiv.appendChild(newRemove);
             $('.mapDisplayContainer').append(newDiv);
         }
+
+        // Create dynamic <div> to display the mappings for html_tag
         for (let htmlMaps in htmlMappingList) {
             var newDiv = document.createElement("div");
             newDiv.className = "mapDisplayList";
@@ -236,9 +233,11 @@
             newDiv.appendChild(newRemove);
             $('.mapDisplayContainer').append(newDiv);
         }
-        clearListBoxSelection();
+
+        clearListBoxSelection(); // Clear selections
     }
 
+    // Function to clear the selections after mapping and removing the disabled status
     function clearListBoxSelection() {
         const selectedField = document.getElementById('fieldName');
         const selectedClass = document.getElementById('fieldClass');
@@ -253,6 +252,7 @@
         selectedHtmlTag.disabled = false;
     }
 
+    // Function to Pass the mappings to controller for saving
     function saveFieldFrameMapping() {
         $.ajax({
             url: 'index.php?r=formFieldFigmaMapping/saveToMappingList',
@@ -274,29 +274,7 @@
         htmlMappingList = {};
     }
 
-    function updateFieldFrameMapping() {
-        var updateModelId = <?php echo $modelId ?>;
-        if (updateModelId !== -1) {
-            $.ajax({
-                url: 'index.php?r=formFieldFigmaMapping/editToMappingList',
-                type: 'POST',
-                data: {updateModelId: updateModelId, fieldNameUpdate: document.getElementById('fieldName').value, classNameUpdate: document.getElementById('fieldClass').value, htmlTagUpdate: document.getElementById('htmlTag').value, frameNameUpdate: document.getElementById('frameName').value},
-                success: function (updateModelId, fieldNameUpdate, classNameUpdate, htmlTagUpdate, frameName) {
-                    console.log(updateModelId);
-                    console.log(fieldNameUpdate);
-                    console.log(classNameUpdate);
-                    console.log(htmlTagUpdate);
-                    console.log(frameName);
-                },
-
-                error: function (jqXHR, textStatus, errorThrown) {
-                    // Handle the error case here
-                    console.error('AJAX request failed:', textStatus, errorThrown);
-                }
-            });
-        }
-    }
-
+    // Function to lock/disable and clear the given listBox
     function lockMappingList(listToLock) {
         const selectedList = document.getElementById(listToLock);
         selectedList.value = -1;

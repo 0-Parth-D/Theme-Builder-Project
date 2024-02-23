@@ -59,9 +59,13 @@ class FormFieldFigmaMappingController extends Controller {
      */
     public function actionCreate() {
         $model = new FormFieldFigmaMapping;
+        // List of all forms available
         $formList = CHtml::listData(ApplicationForms::model()->findAll(), 'id', 'menu_form');
+        // List of all fields available for every form
         $formFieldsList = CHtml::listData(FormFields::model()->findAll(), 'FIELD_ID', 'TITLE');
+        // Static list of class names to be used
         $formClassList = array('Buttons' => 'Buttons', 'Radio-Button-List' => 'Radio-Button-List', 'Dropdown-List' => 'Dropdown-List', 'Checkbox-List' => 'Checkbox-List', 'Input-Labels' => 'Input-Labels', 'Text-Input-Box' => 'Text-Input-Box');
+        // Static list of html tags to be used
         $htmlTagList = array('button' => 'button', 'div' => 'div', 'input' => 'input', 'label' => 'label');
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);    
@@ -75,7 +79,9 @@ class FormFieldFigmaMappingController extends Controller {
         ));
     }
 
+    // Function to save mapping values in form_field_figma_mapping table
     public function actionSaveToMappingList() {
+        
         if (isset($_POST['htmlMappingList']) && $_POST['selectedForm']) {
             $elementHtmlMappingList = json_decode($_POST['htmlMappingList']);
             $selectedForm = $_POST['selectedForm'];
@@ -84,21 +90,22 @@ class FormFieldFigmaMappingController extends Controller {
             $elementMappingList = json_decode($_POST['mappingList']);
             $selectedForm = $_POST['selectedForm'];
         }
+        
         foreach ($elementMappingList as $key => $value) {
             $model = new FormFieldFigmaMapping;
             $model->form_id = $selectedForm;
-            if (is_numeric($key)) {
+            if (is_numeric($key)) { // is_numeric checks for field_id as they are integer values
                 $model->field_id = $key;
                 $model->class_name = '';
                 $model->html_tag = '';
                 $model->flag = 0;
-            } else {
+            } else { // else the saved values correspond to class_name
                 $model->field_id = 0;
                 $model->class_name = $key;
                 $model->html_tag = '';
                 $model->flag = 1;
             }
-            if (!$this->combinationValidation($model)) {
+            if (!$this->combinationValidation($model)) { // Check if existing field already exists
                 $model->frame_name = $value;
                 if (!$model->save()) {
                     // Handle the error here    
@@ -109,14 +116,15 @@ class FormFieldFigmaMappingController extends Controller {
                 throw new CHttpException('The specified mapping already exists.');
             }
         }
-        foreach ($elementHtmlMappingList as $key => $value) {
+        
+        foreach ($elementHtmlMappingList as $key => $value) { // Iterate through the list mapped for Html tags
             $model = new FormFieldFigmaMapping;
             $model->form_id = $selectedForm;
             $model->field_id = 0;
             $model->class_name = '';
             $model->html_tag = $key;
             $model->flag = 2;
-            if (!$this->combinationValidation($model)) {
+            if (!$this->combinationValidation($model)) { // Check if existing field already exists
                 print_r($model);
                 $model->frame_name = $value;
                 if (!$model->save()) {
@@ -129,7 +137,9 @@ class FormFieldFigmaMappingController extends Controller {
         Yii::app()->end();
     }
 
+    // Function to modify existing entries
     public function actionEditToMappingList() {
+        
         if (isset($_POST['fieldNameUpdate']) || isset($_POST['classNameUpdate']) || isset($_POST['htmlTagUpdate'])) {
             $fieldNameUpdate = $_POST['fieldNameUpdate'];
             $classNameUpdate = $_POST['classNameUpdate'];
@@ -137,8 +147,12 @@ class FormFieldFigmaMappingController extends Controller {
             $updateModelId = $_POST['updateModelId'];
 //            $frameNameUpdate = $_POST['frameNameUpdate'];
         }
+        // Get the ID for the model to be updated
         $selectedMapping = FormFieldFigmaMapping::model()->findByPk($updateModelId);
+        // Find all css value mappings for the given combination of form_id, field_id, class_name and html_tag
         $selectedCssMappings = FormFieldCsspropertyValueMapping::model()->findAllByAttributes(array('form_id' => $selectedMapping->form_id, 'field_id' => $selectedMapping->field_id, 'class_name' => $selectedMapping->class_name, 'html_tag' => $selectedMapping->html_tag));
+        
+        // Update the entries with the modified values in the form_field_cssproperty_value_mapping table
         foreach ($selectedCssMappings as $cssMapping) {
             $cssMapping->field_id = $fieldNameUpdate;
             $cssMapping->class_name = $classNameUpdate;
@@ -148,18 +162,18 @@ class FormFieldFigmaMappingController extends Controller {
                 print_r($cssMapping->getErrors());
             }
         }
+        
+        // Update the entries with the modified values in the form_field_figma_mapping table
         $selectedMapping->field_id = $fieldNameUpdate;
         $selectedMapping->class_name = $classNameUpdate;
         $selectedMapping->html_tag = $htmlTagUpdate;
-        if ($selectedMapping->html_tag !== ''){
+        if ($selectedMapping->html_tag !== '') {
             $selectedMapping->flag = 2;
-        }
-        else if($selectedMapping->class_name !== ''){
+        } else if ($selectedMapping->class_name !== '') {
             $selectedMapping->flag = 1;
-        }        
-        else if($selectedMapping->field_id !== 0){
+        } else if ($selectedMapping->field_id !== 0) {
             $selectedMapping->flag = 0;
-        }        
+        }
         if (!$selectedMapping->save()) {
             // Handle the error here
             print_r($selectedMapping->getErrors());
@@ -168,14 +182,15 @@ class FormFieldFigmaMappingController extends Controller {
         Yii::app()->end();
     }
 
-    public function actionEditAllMapping() {
+    // Get the ID of table row to be editted from the admin page
+    public function actionEditAllMapping() { 
         if (isset($_POST['editValue'])) {
             $editId = $_POST['editValue'];
         }
-
         $this->redirect(array('update', 'id' => $editId), array());
     }
 
+    // Function to delete selected entry from the tables
     public function actionDeleteAllMapping() {
         if (isset($_POST['deleteValue'])) {
             $modifyId = $_POST['deleteValue'];
@@ -183,9 +198,13 @@ class FormFieldFigmaMappingController extends Controller {
         $selectedMapping = FormFieldFigmaMapping::model()->findByPk($modifyId);
         print_r($selectedMapping);
         $selectedCssMappings = FormFieldCsspropertyValueMapping::model()->findAllByAttributes(array('form_id' => $selectedMapping->form_id, 'field_id' => $selectedMapping->field_id, 'class_name' => $selectedMapping->class_name, 'html_tag' => $selectedMapping->html_tag));
+        
+        // Delete css properties from form_field_cssproperty_value_mapping table
         foreach ($selectedCssMappings as $cssMapping) {
             $cssMapping->delete();
         }
+        
+        // Delete mapping from form_field_figma_mapping table
         $selectedMapping->delete();
 //        $this->actionSuccessPage();
 //        Yii::app()->end();

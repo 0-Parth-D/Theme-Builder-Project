@@ -144,7 +144,7 @@ $this->menu = array(
 
 </div><!-- form -->
 
-<script>
+<script> // Similar to _form
     $(document).ready(function () {
         // Listen for changes in the "Form" dropdown list
         $('#formName').on('change', function () {
@@ -177,15 +177,6 @@ $this->menu = array(
                 }
             });
         }).change(); // Trigger the change event
-    });
-
-
-    $(document).ready(function () {
-        // Event handler for page load
-        $(window).on('load', function () {
-            // Get the controller and action names
-//            // Call the function to fetch CSS properties
-        });
     });
 
     var mappingList = {};
@@ -305,25 +296,6 @@ $this->menu = array(
         selectedField.disabled = false;
         selectedClass.disabled = false;
         selectedHtmlTag.disabled = false;
-    }
-
-    function saveFieldFrameMapping() {
-        $.ajax({
-            url: 'index.php?r=formFieldFigmaMapping/saveToMappingList',
-            type: 'POST',
-            data: {htmlMappingList: JSON.stringify(htmlMappingList), mappingList: JSON.stringify(mappingList), selectedForm: document.getElementById('formName').value},
-            success: function (htmlMappingList, mappingList, selectedForm) {
-                console.log(htmlMappingList);
-                console.log(mappingList);
-                console.log(selectedForm);
-            },
-
-            error: function (jqXHR, textStatus, errorThrown) {
-                // Handle the error case here
-                console.error('AJAX request failed:', textStatus, errorThrown);
-            }
-        });
-        saveCssProperties();
     }
 
     function updateFieldFrameMapping() {

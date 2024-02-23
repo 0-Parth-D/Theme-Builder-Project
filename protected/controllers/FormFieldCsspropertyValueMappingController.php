@@ -59,7 +59,7 @@ class FormFieldCsspropertyValueMappingController extends Controller {
      */
     public function actionCreate() {
         $model = new FormFieldCsspropertyValueMapping;
-        
+
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
 
@@ -68,7 +68,7 @@ class FormFieldCsspropertyValueMappingController extends Controller {
             $this->actionPassingPostToParser();
 //			$model->attributes=$_POST['FormFieldCsspropertyValueMapping'];
 //			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+            $this->redirect(array('view', 'id' => $model->id));
         }
 
         $this->render('create', array(
@@ -76,26 +76,29 @@ class FormFieldCsspropertyValueMappingController extends Controller {
         ));
     }
 
+    // Function to map individual css properties to their respective frame mappings
     public function actionPassingPostToParser() {
         if (isset($_POST['objCss'])) {
             $value = json_decode($_POST['objCss']);
         }
 //        print_r($value);
-        $textInclude = ['font-family', 'font-style', 'font-weight', 'font-size', 'line-height', 'color'];
+        
         foreach ($value as $key => $items) {
             foreach ($items as $item) {
-                $propertyValuePair = explode(':', $item);
-                if (strpos($propertyValuePair[1], 'url')!== false){
-                    $propertyValuePair[1] = 'url(images/'.explode('(', $propertyValuePair[1])[1];
+                $propertyValuePair = explode(':', $item); // Extract css property and value pair
+                
+                if (strpos($propertyValuePair[1], 'url') !== false) { // Add path to /images folder if background is set to image url
+                    $propertyValuePair[1] = 'url(images/' . explode('(', $propertyValuePair[1])[1];
                 }
+                
+                // List the existing supported css properties and mappings from their tables
                 $cssPropertiesModel = CssProperties::model()->find('property_name=:property_name', array(':property_name' => $propertyValuePair[0]));
                 $formFieldFigmaMapping = FormFieldFigmaMapping::model()->find('frame_name=:frame_name', array(':frame_name' => $key));
-//                if (str_contains($key, 'text_') && !in_array($propertyValuePair[0], $textInclude)){
-//                    continue;
-//                }
+
+                // If both exist, create a form entry for each of the css property mapped to the field
                 if ($cssPropertiesModel !== null) {
                     $model = new FormFieldCsspropertyValueMapping;
-                    if (isset($formFieldFigmaMapping->form_id)){
+                    if (isset($formFieldFigmaMapping->form_id)) {
                         $model->form_id = $formFieldFigmaMapping->form_id;
                         $model->field_id = $formFieldFigmaMapping->field_id;
                         $model->class_name = $formFieldFigmaMapping->class_name;
@@ -106,13 +109,12 @@ class FormFieldCsspropertyValueMappingController extends Controller {
                             $model->save();
                         }
                     }
-                }
-                else {
+                } else { // If css property does not exist, add to form_field_drop_css_property table
                     $existingEntry = FormFieldDropCssProperty::model()->find('property=:property AND element=:element', array(':property' => $propertyValuePair[0], ':element' => explode('_', $key)[1]));
 
-                        $dropProperty = new FormFieldDropCssProperty;
-                        $dropProperty->property = $propertyValuePair[0];
-                        $dropProperty->element = explode('_', $key)[1];
+                    $dropProperty = new FormFieldDropCssProperty;
+                    $dropProperty->property = $propertyValuePair[0];
+                    $dropProperty->element = explode('_', $key)[1];
                     if ($existingEntry === null) {
                         if (!$dropProperty->save()) {
                             // Handle the error here
@@ -271,7 +273,7 @@ class FormFieldCsspropertyValueMappingController extends Controller {
 
         // Find the CSS properties for the given form ID
         $formFieldStyles = FormFieldCsspropertyValueMapping::model()->findAllByAttributes(array('form_id' => $formId));
-        
+
         // Array to store CSS properties for each form element
         $cssStyles = array();
 
@@ -281,22 +283,20 @@ class FormFieldCsspropertyValueMappingController extends Controller {
             $fieldId = $formFieldStyle->field_id;
             $className = $formFieldStyle->class_name;
             $htmlTag = $formFieldStyle->html_tag;
-            if ($fieldId != 0){
+            if ($fieldId != 0) {
                 $identifier = "#";
                 $selector = "field_" . $fieldId;
-            }
-            else if ($className != null){
+            } else if ($className != null) {
                 $identifier = ".";
                 $selector = $className;
-            }
-            else if ($htmlTag != null) {
+            } else if ($htmlTag != null) {
                 $identifier = "";
                 $selector = $htmlTag;
             }
             $cssPropertyId = $formFieldStyle->css_property_id;
             $cssProperty = CssProperties::model()->findByPk($cssPropertyId)->property_name;
             $value = $formFieldStyle->value;
-           
+
             // Create CSS rule and add it to the array
             $cssStyles[] = $identifier . $selector . "{" . $cssProperty . ":" . $value . "}";
         }
