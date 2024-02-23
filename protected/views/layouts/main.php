@@ -124,6 +124,10 @@
                         <li><a href="index.php?r=formFieldCsspropertyValueMapping/create">Element CSS Properties</a></li>
                         <li><a href="index.php?r=effects/create">Apply Effect</a></li>
                         <li><a href="index.php?r=scriptCode/index">Effect Script</a></li>
+                        <li><a href="index.php?r=themeForReport/reportFrameMap">Effect Script</a></li>
+                        <li><a href="index.php?r=themeForReport/reportFrameMap">Figma Map Report Theme</a></li>
+                        <li><a href="index.php?r=formFieldFIgmaMapping/create">Figma Map Form Theme</a></li>
+                        
                     </ul>
                 </div>
             </nav>

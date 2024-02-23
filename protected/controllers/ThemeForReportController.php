@@ -89,7 +89,7 @@ class ThemeForReportController extends Controller {
             $mappingList = (array) json_decode($_POST['mappingList']);
             $mappingList = array_flip($mappingList);
             $themeName = $_POST['themeName'];
-//                    print_r($objCss);
+                    print_r($objCss);
 //                    print_r($mappingList);
 //            print_r($mappingList);
 
@@ -117,6 +117,19 @@ class ThemeForReportController extends Controller {
                         $reportElementModel = ReportElementCssSet::model()->findByAttributes(array('css_property_id' => $cssPropertiesModel->id, 'element_id' => $mappingList[$key]));
                     print_r($cssPropertiesModel->id.' '. $cssPropertiesModel->property_name);
                     print_r($mappingList[$key]. ' </br>');
+                    }
+                    else if($cssPropertiesModel === null){
+                        $existingEntry = FormFieldDropCssProperty::model()->find('property=:property AND element=:element', array(':property' => $propertyValuePair[0], ':element' => explode('_', $key)[1]));
+
+                        $dropProperty = new FormFieldDropCssProperty;
+                        $dropProperty->property = $propertyValuePair[0];
+                        $dropProperty->element = explode('_', $key)[1];
+                        if ($existingEntry === null) {
+                            if (!$dropProperty->save()) {
+                                // Handle the error here
+                                print_r($dropProperty->getErrors());
+                            }
+                        }
                     }
                     if ($reportElementModel !== -1 && $reportElementModel !== null) {
                         $model = new ThemeForReport;

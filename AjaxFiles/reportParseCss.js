@@ -7,8 +7,10 @@ var tagList = {'form': ['form', 'table'],
     'button': ['button', 'btn'],
     'textInput': ['input', 'inp', 'text field'],
     'cellText': ['cell text', 'data'],
-    'headerText': ['column', 'header', 'header text']
+    'headerText': ['column', 'header', 'header text'],
+    'selectFilterText': ['dropdown text']
 };
+var textInclude = ['font-family', 'font-style', 'font-weight', 'font-size', 'line-height', 'color'];
 
 // Function to fetch CSS properties
 function getFrameDataReport() {
@@ -26,6 +28,9 @@ function getFrameDataReport() {
     function addSemicolon(item) {
         return item + ' !important;';
     }
+    
+    // Initialize frame name for previous iteration
+    var lastClassNameTag = 'form_form_1';
 
     // Go through the string input until '*/' is not found
     while (sampleCss.indexOf('*/') !== -1) {
@@ -61,6 +66,17 @@ function getFrameDataReport() {
             });
             sampleCss = '';
         }
+//    console.log(objCss);
+    // To assign text properties to input and buttons and not to row
+        if (classNameTag.includes('selectFilterText')) {
+            for (var i = 0; i < objCss[classNameTag].length; i++){
+                if (textInclude.some(substring => objCss[classNameTag][i].includes(substring))){
+//                      console.log(objCss[lastClassNameTag]);
+                    objCss[lastClassNameTag] = objCss[lastClassNameTag].concat(objCss[classNameTag][i]);
+                }
+            }   
+        }
+        lastClassNameTag = classNameTag; // Update last class name
     }
     
     // Update the UI for listing frame names
